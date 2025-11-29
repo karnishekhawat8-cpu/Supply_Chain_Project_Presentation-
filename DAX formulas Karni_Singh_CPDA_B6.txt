@@ -1,0 +1,73 @@
+ --------------------------------------------------------- DAX formulas -----------------------------------------------
+
+
+1. HighRiskSupplier =
+   IF(
+    Suppliers[Risk_Score] > 80 &&
+    Suppliers[Reliability_Rating] < 3,
+    "YES",
+    "NO")
+
+
+2.  Delayed Shipments =
+    CALCULATE(
+    COUNTROWS(Shipments),
+    Shipments[Status] = "Delayed")
+
+
+3.  ShortageFlag =
+    IF(Warehouses[Stock_Level] < Warehouses[Min_Threshold],1,0)
+
+
+
+4.  TotalShipments = COUNT(Shipments[Shipment_ID])
+
+
+5.  OnTimePct =
+    DIVIDE(
+    CALCULATE(COUNT(Shipments[Shipment_ID]), Shipments[Status] = "On Time"),
+    [TotalShipments])
+
+
+
+6.  DelayedPct =
+    DIVIDE(
+    CALCULATE(COUNT(Shipments[Shipment_ID]), Shipments[Status] = "Delayed"),
+    [TotalShipments])
+
+
+7.  AvgDeliveryTime = AVERAGE(Shipments[Delay_Days])
+
+
+8.  ReturnRatePct =
+    DIVIDE(COUNT(Returns[Return_ID]), COUNT(Shipments[Shipment_ID]))
+
+
+9.   AvgRiskScore = AVERAGE(Suppliers[Risk_Score])
+
+
+10.  TotalStorageExpense =
+     SUM(Warehouses[Storage_Cost])
+
+
+11.  TotalStorageExpense =
+     SUMX(Warehouses, Warehouses[Stock_Level] * 2)   // Example cost model
+
+
+12.  TotalReturnCost =
+     SUM(Returns[Cost])
+
+
+13.  LateShipments =
+     CALCULATE(
+    COUNTROWS( Shipments ),
+    Shipments[Status] = "Delayed")
+
+14. LateShipmentPct =
+    DIVIDE(
+    [LateShipments],              -- number of delayed shipments
+    COUNTROWS(Shipments),         -- total number of shipments
+    0                             -- return 0 if denominator is zero)
+
+
+
